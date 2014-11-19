@@ -7,11 +7,12 @@ ${current_class.methods.constructor.generate_code($current_class)}
 #set generator = $current_class.generator
 #set methods = $current_class.methods_clean()
 #set st_methods = $current_class.static_methods_clean()
+#set is_native = $generator.is_native($current_class.class_name)
 #
 static int lua_${generator.prefix}_${current_class.class_name}_finalize(lua_State* tolua_S)
 {
     printf("luabindings: finalizing LUA object (${current_class.class_name})");
-#if $generator.script_control_cpp
+#if $generator.script_control_cpp or $is_native
 \#if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
     if (
@@ -42,13 +43,13 @@ int lua_register_${generator.prefix}_${current_class.class_name}(lua_State* tolu
 {
     tolua_usertype(tolua_S,"${generator.scriptname_from_native($current_class.namespaced_class_name, $current_class.namespace_name)}");
     #if len($current_class.parents) > 0
-        #if $generator.script_control_cpp and $current_class.has_constructor
+        #if ($generator.script_control_cpp and $current_class.has_constructor) or $is_native
     tolua_cclass(tolua_S,"${current_class.class_name}","${generator.scriptname_from_native($current_class.namespaced_class_name, $current_class.namespace_name)}","${generator.scriptname_from_native($current_class.parents[0].namespaced_class_name,$current_class.parents[0].namespace_name)}",lua_${generator.prefix}_${current_class.class_name}_finalize);
         #else
     tolua_cclass(tolua_S,"${current_class.class_name}","${generator.scriptname_from_native($current_class.namespaced_class_name, $current_class.namespace_name)}","${generator.scriptname_from_native($current_class.parents[0].namespaced_class_name,$current_class.parents[0].namespace_name)}",nullptr);
         #end if
     #else
-        #if $generator.script_control_cpp and $current_class.has_constructor
+        #if ($generator.script_control_cpp and $current_class.has_constructor) or $is_native
     tolua_cclass(tolua_S,"${current_class.class_name}","${generator.scriptname_from_native($current_class.namespaced_class_name, $current_class.namespace_name)}","",lua_${generator.prefix}_${current_class.class_name}_finalize);
         #else
     tolua_cclass(tolua_S,"${current_class.class_name}","${generator.scriptname_from_native($current_class.namespaced_class_name, $current_class.namespace_name)}","",nullptr);

@@ -907,6 +907,7 @@ class Generator(object):
         self.prefix = opts['prefix']
         self.headers = opts['headers'].split(' ')
         self.classes = opts['classes']
+        self.native_classes = opts['native_classes']
         self.classes_need_extend = opts['classes_need_extend']
         self.classes_have_no_parents = opts['classes_have_no_parents'].split(' ')
         self.base_classes_to_skip = opts['base_classes_to_skip'].split(' ')
@@ -1014,6 +1015,8 @@ class Generator(object):
             if md:
                 return True
         return False
+    def is_native(self, class_name):
+        return class_name in self.native_classes
 
     def sorted_classes(self):
         '''
@@ -1379,6 +1382,7 @@ def main():
                 'prefix': config.get(s, 'prefix'),
                 'headers':    (config.get(s, 'headers'        , 0, dict(userconfig.items('DEFAULT')))),
                 'classes': config.get(s, 'classes').split(' '),
+                'native_classes': config.get(s, 'native_classes').split(' '),
                 'classes_need_extend': config.get(s, 'classes_need_extend').split(' ') if config.has_option(s, 'classes_need_extend') else [],
                 'clang_args': (config.get(s, 'extra_arguments', 0, dict(userconfig.items('DEFAULT'))) or "").split(" "),
                 'target': os.path.join(workingdir, "targets", t),
