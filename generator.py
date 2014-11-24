@@ -1382,7 +1382,7 @@ def main():
                 'prefix': config.get(s, 'prefix'),
                 'headers':    (config.get(s, 'headers'        , 0, dict(userconfig.items('DEFAULT')))),
                 'classes': config.get(s, 'classes').split(' '),
-                'native_classes': config.get(s, 'native_classes').split(' '),
+                'native_classes': config.get(s, 'native_classes').split(' ') if config.has_option(s, 'native_classes') else [],
                 'classes_need_extend': config.get(s, 'classes_need_extend').split(' ') if config.has_option(s, 'classes_need_extend') else [],
                 'clang_args': (config.get(s, 'extra_arguments', 0, dict(userconfig.items('DEFAULT'))) or "").split(" "),
                 'target': os.path.join(workingdir, "targets", t),
