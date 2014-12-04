@@ -11,7 +11,7 @@ ${current_class.methods.constructor.generate_code($current_class)}
 #
 static int lua_${generator.prefix}_${current_class.class_name}_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (${current_class.class_name})");
+    //printf("luabindings: finalizing LUA object (${current_class.class_name})");
 #if $generator.script_control_cpp or $is_native
 \#if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
